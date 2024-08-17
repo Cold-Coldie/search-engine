@@ -1,10 +1,13 @@
-﻿using SearchApi.Repositories.Interfaces; // Importing the interfaces for the repositories.
-using SearchApi.Services.Interfaces; // Importing the interface for the service.
-using SearchApi.Utills; // Importing utilities like CSVReader, EnglishTokenizer, and EnglishStemmer.
+﻿using SearchApi.Repositories.Interfaces;
+using SearchApi.Services.Interfaces;
+using SearchApi.Utills;
 
 namespace SearchApi.Services.Implementations
 {
-    // Implementation of the IIndexService interface.
+    /// <summary>
+    /// Implementation of the IIndexService interface.
+    /// This service provides functionality to build an inverted index from a CSV file.
+    /// </summary>
     public class IndexService : IIndexService
     {
         // Private fields to hold references to the repositories and file service.
@@ -12,16 +15,36 @@ namespace SearchApi.Services.Implementations
         private readonly IDocumentRepository documentRepository;
         private readonly IFileService fileService;
 
-        // Constructor to inject dependencies for the repositories and file service.
-        public IndexService(IIndexRepository invertedIndexRepository, IDocumentRepository documentRepository, IFileService fileService)
+        /// <summary>
+        /// Constructor to inject dependencies for the repositories and file service.
+        /// </summary>
+        /// <param name="invertedIndexRepository">Repository to store and retrieve the inverted index.</param>
+        /// <param name="documentRepository">Repository to store and retrieve documents.</param>
+        /// <param name="fileService">Service to handle file storage operations.</param>
+        public IndexService(
+            IIndexRepository invertedIndexRepository,
+            IDocumentRepository documentRepository,
+            IFileService fileService)
         {
-            this.invertedIndexRepository = invertedIndexRepository; // Assigning the injected index repository to the local field.
-            this.documentRepository = documentRepository; // Assigning the injected document repository to the local field.
-            this.fileService = fileService; // Assigning the injected file service to the local field.
+            // Assigning the injected dependencies to the local fields.
+            this.invertedIndexRepository = invertedIndexRepository;
+            this.documentRepository = documentRepository;
+            this.fileService = fileService;
         }
 
-        // Method to build the inverted index from a CSV file.
-        public async Task BuildInvertedIndexByCSVFile(IFormFile file, string tokenizerType, bool isAllowedFrequency, bool isWithStemming)
+        /// <summary>
+        /// Builds the inverted index from a CSV file.
+        /// </summary>
+        /// <param name="file">The CSV file containing the documents.</param>
+        /// <param name="tokenizerType">Type of tokenizer to use (e.g., word, character).</param>
+        /// <param name="isAllowedFrequency">Flag to determine if frequency information should be included.</param>
+        /// <param name="isWithStemming">Flag to determine if stemming should be applied to the terms.</param>
+        /// <returns>A task representing the asynchronous operation.</returns>
+        public async Task BuildInvertedIndexByCSVFile(
+            IFormFile file,
+            string tokenizerType,
+            bool isAllowedFrequency,
+            bool isWithStemming)
         {
             // Store the uploaded file locally and get the file path.
             string filePath = await fileService.StoreImageToLocalFolder(file);
@@ -56,8 +79,8 @@ namespace SearchApi.Services.Implementations
                         invertedIndex[term].Add(key);
                     }
                     else
-                    // If the term doesn't exist, create a new entry with the document ID.
                     {
+                        // If the term doesn't exist, create a new entry with the document ID.
                         invertedIndex[term] = new List<int> { key };
                     }
                 }
