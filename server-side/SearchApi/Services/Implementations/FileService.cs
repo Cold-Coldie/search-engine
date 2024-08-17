@@ -1,20 +1,31 @@
-﻿using SearchApi.Services.Interfaces; // Importing the interface for the file service.
+﻿using SearchApi.Services.Interfaces;
 
 namespace SearchApi.Services.Implementations
 {
-    // Implementation of the IFileService interface.
+    /// <summary>
+    /// Implementation of the IFileService interface.
+    /// This service provides methods to store and delete files on the local server.
+    /// </summary>
     public class FileService : IFileService
     {
         // Private field to store the hosting environment, used to access the content root path.
         private readonly IWebHostEnvironment hostingEnvironment;
 
-        // Constructor to inject the hosting environment dependency.
+        /// <summary>
+        /// Constructor to inject the hosting environment dependency.
+        /// </summary>
+        /// <param name="hostingEnvironment">The hosting environment provides access to the content root path.</param>
         public FileService(IWebHostEnvironment hostingEnvironment)
         {
-            this.hostingEnvironment = hostingEnvironment; // Assigning the injected hosting environment to the local field.
+            // Assigning the injected hosting environment to the local field.
+            this.hostingEnvironment = hostingEnvironment;
         }
 
-        // Method to store an uploaded image file to a local folder on the server.
+        /// <summary>
+        /// Stores an uploaded image file to a local folder on the server.
+        /// </summary>
+        /// <param name="file">The uploaded image file.</param>
+        /// <returns>The file path where the image was saved.</returns>
         public async Task<string> StoreImageToLocalFolder(IFormFile file)
         {
             // Determine the path to the 'Uploads' folder within the content root.
@@ -34,7 +45,10 @@ namespace SearchApi.Services.Implementations
             return filePath;
         }
 
-        // Method to delete a file from the local file system.
+        /// <summary>
+        /// Deletes a file from the local file system.
+        /// </summary>
+        /// <param name="filePath">The file path of the file to be deleted.</param>
         public void DeleteFile(string filePath)
         {
             // Check if the file exists at the specified path.

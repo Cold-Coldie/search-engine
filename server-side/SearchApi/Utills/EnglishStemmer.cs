@@ -2,6 +2,9 @@
 
 namespace SearchApi.Utills
 {
+    /// <summary>
+    /// A class that implements the English Porter Stemmer algorithm for word stemming.
+    /// </summary>
     public class EnglishStemmer
     {
         private static readonly Regex doubleConsonantRegex = new Regex("(bb|dd|ff|gg|mm|nn|pp|rr|tt)$");
@@ -9,6 +12,11 @@ namespace SearchApi.Utills
         private static readonly Regex liEndingReplacementRegex = new Regex("eed|ing|ed");
         private static readonly Regex step1bRegex = new Regex("([aeiouy].)y$");
 
+        /// <summary>
+        /// Stems the input word according to the Porter stemming algorithm.
+        /// </summary>
+        /// <param name="word">The word to be stemmed.</param>
+        /// <returns>The stemmed word.</returns>
         public static string Stem(string word)
         {
             word = word.ToLower();
@@ -28,6 +36,11 @@ namespace SearchApi.Utills
             return word;
         }
 
+        /// <summary>
+        /// Applies Step 1a of the Porter stemming algorithm.
+        /// </summary>
+        /// <param name="word">The word to process.</param>
+        /// <returns>The word after applying Step 1a.</returns>
         private static string Step1a(string word)
         {
             if (word.EndsWith("sses"))
@@ -41,6 +54,11 @@ namespace SearchApi.Utills
             return word;
         }
 
+        /// <summary>
+        /// Applies Step 1b of the Porter stemming algorithm.
+        /// </summary>
+        /// <param name="word">The word to process.</param>
+        /// <returns>The word after applying Step 1b.</returns>
         private static string Step1b(string word)
         {
             if (word.EndsWith("eed"))
@@ -70,6 +88,11 @@ namespace SearchApi.Utills
             return word;
         }
 
+        /// <summary>
+        /// Applies Step 1c of the Porter stemming algorithm.
+        /// </summary>
+        /// <param name="word">The word to process.</param>
+        /// <returns>The word after applying Step 1c.</returns>
         private static string Step1c(string word)
         {
             if (word.EndsWith("y"))
@@ -81,6 +104,11 @@ namespace SearchApi.Utills
             return word;
         }
 
+        /// <summary>
+        /// Applies Step 2 of the Porter stemming algorithm.
+        /// </summary>
+        /// <param name="word">The word to process.</param>
+        /// <returns>The word after applying Step 2.</returns>
         private static string Step2(string word)
         {
             if (word.EndsWith("ational"))
@@ -127,6 +155,12 @@ namespace SearchApi.Utills
                 word = word.Substring(0, word.Length - 4) + "log";
             return word;
         }
+
+        /// <summary>
+        /// Applies Step 3 of the Porter stemming algorithm.
+        /// </summary>
+        /// <param name="word">The word to process.</param>
+        /// <returns>The word after applying Step 3.</returns>
         private static string Step3(string word)
         {
             if (word.EndsWith("icate"))
@@ -146,6 +180,11 @@ namespace SearchApi.Utills
             return word;
         }
 
+        /// <summary>
+        /// Applies Step 4 of the Porter stemming algorithm.
+        /// </summary>
+        /// <param name="word">The word to process.</param>
+        /// <returns>The word after applying Step 4.</returns>
         private static string Step4(string word)
         {
             if (word.EndsWith("al"))
@@ -185,6 +224,11 @@ namespace SearchApi.Utills
             return word;
         }
 
+        /// <summary>
+        /// Applies Step 5a of the Porter stemming algorithm.
+        /// </summary>
+        /// <param name="word">The word to process.</param>
+        /// <returns>The word after applying Step 5a.</returns>
         private static string Step5a(string word)
         {
             if (word.EndsWith("e"))
@@ -196,6 +240,11 @@ namespace SearchApi.Utills
             return word;
         }
 
+        /// <summary>
+        /// Applies Step 5b of the Porter stemming algorithm.
+        /// </summary>
+        /// <param name="word">The word to process.</param>
+        /// <returns>The word after applying Step 5b.</returns>
         private static string Step5b(string word)
         {
             if (HasMeasure(word) > 1 && word.EndsWith("ll"))
@@ -203,6 +252,11 @@ namespace SearchApi.Utills
             return word;
         }
 
+        /// <summary>
+        /// Calculates the measure of a word, which is the number of vowel groups.
+        /// </summary>
+        /// <param name="word">The word to measure.</param>
+        /// <returns>The measure of the word.</returns>
         private static int HasMeasure(string word)
         {
             word = word.ToLower();
@@ -226,11 +280,21 @@ namespace SearchApi.Utills
             return measure;
         }
 
+        /// <summary>
+        /// Checks if a character is a vowel.
+        /// </summary>
+        /// <param name="c">The character to check.</param>
+        /// <returns>True if the character is a vowel; otherwise, false.</returns>
         private static bool IsVowel(char c)
         {
             return "aeiou".IndexOf(c) >= 0;
         }
 
+        /// <summary>
+        /// Determines if a word is short based on its measure.
+        /// </summary>
+        /// <param name="word">The word to check.</param>
+        /// <returns>True if the word is short; otherwise, false.</returns>
         private static bool IsShort(string word)
         {
             return HasMeasure(word) == 1 && !IsVowel(word[0]);
